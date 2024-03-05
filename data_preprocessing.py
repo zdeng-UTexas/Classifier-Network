@@ -34,8 +34,8 @@ def read_csv(file_path):
     return labels_matrix, features_matrix
 
 # Usage example
-file_path = '/Users/zhiyunjerrydeng/AEROPlan/embeddings_old.csv'
-labels, features = read_csv(file_path)
+# file_path = '/Users/zhiyunjerrydeng/AEROPlan/embeddings_old.csv'
+# labels, features = read_csv(file_path)
 
 # print(labels.shape)
 # print(features.shape)

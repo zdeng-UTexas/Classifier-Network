@@ -8,7 +8,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 
-labels, features = read_csv('/Users/zhiyunjerrydeng/AEROPlan/embeddings_256_training.csv')
+labels, features = read_csv('/home/zhiyundeng/AEROPlan/experiment/20240302/training/embedding_of_patch_64.csv')
 
 print(labels)
 print(features.shape)
@@ -42,7 +42,7 @@ clf_best = grid.best_estimator_
 
 ## Predicting
 
-temp, X_new = read_csv('/Users/zhiyunjerrydeng/AEROPlan/embeddings_256_testing.csv')
+temp, X_new = read_csv('/home/zhiyundeng/AEROPlan/experiment/20240302/testing/embedding_of_patch_64.csv')
 # print(temp)
 
 # Preprocess the new dataset (e.g., feature scaling)
@@ -59,7 +59,7 @@ print(y_pred.shape)
 # print(y_pred)
 y_pred_df = pd.DataFrame(y_pred, columns=['Predicted'])
 # Save to CSV
-y_pred_df.to_csv('/Users/zhiyunjerrydeng/AEROPlan/embeddings_256_predictive_class.csv', header=False, index=False)
+y_pred_df.to_csv('/home/zhiyundeng/AEROPlan/experiment/20240302/testing/predicted_class_of_patch_64.csv', header=False, index=False)
 
 
 ## Assign cost 
@@ -73,4 +73,4 @@ class_to_number = {
 
 y_pred_cost = [class_to_number[label] for label in y_pred]
 y_pred_cost_df = pd.DataFrame(y_pred_cost, columns=['Cost'])
-y_pred_cost_df.to_csv('/Users/zhiyunjerrydeng/AEROPlan/embeddings_256_predictive_cost.csv', header=False, index=False)
+y_pred_cost_df.to_csv('/home/zhiyundeng/AEROPlan/experiment/20240302/testing/predicted_cost_of_patch_64.csv', header=False, index=False)
