@@ -5,8 +5,17 @@ from sklearn.neural_network import MLPClassifier
 from data_preprocessing_Unity import read_csv
 import matplotlib.pyplot as plt
 
+# Predefined terrain costs
+costs = {
+    'building': 254,
+    'canopy': 160,
+    'grass': 80,
+    'dirt': 10,
+    'smooth_trail': 0
+}
+
 # Load your training data
-labels, features = read_csv('/path/to/training/data.csv')
+labels, features = read_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_training/embedding_of_patch_part_5.csv')
 
 # Scale features
 scaler = StandardScaler().fit(features)
@@ -17,7 +26,7 @@ mlp = MLPClassifier(hidden_layer_sizes=(100,), max_iter=300, activation='relu', 
 mlp.fit(features_scaled, labels)
 
 # Load testing data
-_, X_new = read_csv('/path/to/testing/data.csv')
+_, X_new = read_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/combined_embedding_of_patch.csv')
 X_new_scaled = scaler.transform(X_new)
 
 # Predict probabilities and calculate interpolated costs
@@ -35,7 +44,7 @@ results = pd.read_csv('predicted_classes_and_costs.csv')
 interpolated_costs = results['Interpolated_Cost'].values
 
 # Correctly reshape the costs array. Ensure these dimensions match your actual data's structure.
-cost_map = interpolated_costs.reshape(correct_row_count, correct_column_count)
+cost_map = interpolated_costs.reshape(500, 500)
 
 # If you need to swap the x and y axes (transpose the matrix)
 cost_map_transposed = cost_map.T
