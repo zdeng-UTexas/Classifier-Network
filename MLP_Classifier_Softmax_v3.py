@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
 from data_preprocessing_Unity import read_csv
 import matplotlib.pyplot as plt
+from PIL import Image
 
 # Predefined terrain costs
 costs = {
@@ -65,6 +66,21 @@ plt.title('Global Costmap of the Area')
 plt.xlabel('Column Index')
 plt.ylabel('Row Index')
 plt.savefig('global_costmap_transposed.png')
+plt.close()
+
+# plt.figure(figsize=(1, 1), dpi=500)
+# plt.imshow(cost_map_transposed, cmap='Greys', interpolation='nearest', aspect='auto')
+# plt.axis('off')
+# plt.savefig('global_costmap_transposed_500x500.png', bbox_inches='tight', pad_inches=0)
+# plt.close()
+
+# Normalize the cost_map to be within the 0-255 range for grayscale
+normalized_cost_map = 255 * (cost_map_transposed - np.min(cost_map_transposed)) / (np.max(cost_map_transposed) - np.min(cost_map_transposed))
+normalized_cost_map = normalized_cost_map.astype(np.uint8)
+# Create an image from the normalized array
+image = Image.fromarray(normalized_cost_map)
+# Save the image as a PNG
+image.save('global_costmap_transposed_500x500.png')
 
 
 # Visualization of feature maps
