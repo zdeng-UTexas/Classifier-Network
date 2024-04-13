@@ -127,6 +127,28 @@ target_p5_path = 'global_costmap_P5.pgm'
 convert_p2_to_p5(source_p2_path, target_p5_path)
 
 # Visualization of feature maps
+
+def save_feature_map_as_pgm(feature_map, filename, max_val=255):
+    """
+    Saves a feature map as a PGM file.
+    
+    Parameters:
+        feature_map (np.array): The numpy array of the feature map.
+        filename (str): The output filename.
+        max_val (int): The maximum pixel value (default 255 for PGM format).
+    """
+    # Normalize feature_map to 0-255
+    normalized_feature_map = 255 * (feature_map - np.min(feature_map)) / (np.max(feature_map) - np.min(feature_map))
+    normalized_feature_map = normalized_feature_map.astype(np.uint8)
+    
+    # Write to PGM (P2 format)
+    with open(filename, 'w') as f:
+        f.write("P2\n")
+        f.write(f"{feature_map.shape[1]} {feature_map.shape[0]}\n")
+        f.write(f"{max_val}\n")
+        for row in normalized_feature_map:
+            f.write(' '.join(str(pixel) for pixel in row) + '\n')
+
 # Load the probabilities from the CSV file saved previously
 prob_df = pd.read_csv('class_probabilities.csv')
 
@@ -156,6 +178,7 @@ for class_label in prob_df.columns:
     plt.savefig(f'feature_map_{class_label}.png')
     plt.close()  # Close the figure to free memory
 
-
-
+    # Save the feature map as a PGM file
+    pgm_filename = f'feature_map_{class_label}.pgm'
+    save_feature_map_as_pgm(feature_map, pgm_filename)
 
