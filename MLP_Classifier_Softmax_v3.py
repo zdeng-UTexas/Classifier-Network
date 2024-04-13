@@ -82,6 +82,49 @@ image = Image.fromarray(normalized_cost_map)
 # Save the image as a PNG
 image.save('global_costmap_transposed_500x500.png')
 
+# File path for saving the PGM file
+target_image_path = 'global_costmap_P2.pgm'
+# Writing the normalized data to a PGM file in the P2 format
+with open(target_image_path, 'w') as f:
+    # Write the PGM header
+    f.write("P2\n") # Magic number for P2 format
+    f.write(f"{normalized_cost_map.shape[1]} {normalized_cost_map.shape[0]}\n") # Width and height
+    f.write("255\n") # Maximum pixel value
+    # Write the pixel data
+    for row in normalized_cost_map:
+        f.write(' '.join(str(pixel) for pixel in row) + '\n')
+
+def convert_p2_to_p5(p2_path, p5_path):
+    # Read the P2 file
+    with open(p2_path, 'r') as file:
+        # Read and skip the magic number
+        magic = file.readline()
+        # Read the next lines for width, height, and max value
+        dimensions = file.readline().strip()
+        maxval = file.readline().strip()
+
+        # Initialize a list to hold the pixel values
+        pixels = []
+        # Read the rest of the file for the pixel data
+        for line in file:
+            pixels.extend(line.strip().split())
+
+    # Convert pixel values from strings to integers
+    pixel_values = [int(pixel) for pixel in pixels]
+
+    # Convert pixel values to bytes
+    binary_data = bytes(pixel_values)
+
+    # Write the P5 file
+    with open(p5_path, 'wb') as file:
+        file.write(bytearray(f"P5\n{dimensions}\n{maxval}\n", 'ascii'))
+        file.write(binary_data)
+
+# Specify the source P2 and target P5 file paths
+source_p2_path = 'global_costmap_P2.pgm'
+target_p5_path = 'global_costmap_P5.pgm'
+# Convert the P2 file to P5
+convert_p2_to_p5(source_p2_path, target_p5_path)
 
 # Visualization of feature maps
 # Load the probabilities from the CSV file saved previously
@@ -112,3 +155,7 @@ for class_label in prob_df.columns:
     # Save the figure
     plt.savefig(f'feature_map_{class_label}.png')
     plt.close()  # Close the figure to free memory
+
+
+
+
