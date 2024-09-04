@@ -9,8 +9,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 
 # labels, features = read_csv('/home/zhiyundeng/AEROPlan/experiment/20240320/training/embedding_of_patch_32.csv')
-labels, features = read_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_training/embedding_of_patch_part_5.csv')
-
+# labels, features = read_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_training/embedding_of_patch_part_5.csv')
+labels, features = read_csv('/home/zhiyundeng/aeroplan/experiment/20240605_EER_64_training/embedding_of_patch.csv')
 
 print(labels)
 print(features.shape)
@@ -44,8 +44,9 @@ clf_best = grid.best_estimator_
 
 ## Predicting
 
-temp, X_new = read_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/combined_embedding_of_patch.csv')
+# temp, X_new = read_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/combined_embedding_of_patch.csv')
 # print(temp)
+temp, X_new = read_csv('/home/zhiyundeng/aeroplan/experiment/20240605_EER_64/embedding_of_patch.csv')
 
 # Preprocess the new dataset (e.g., feature scaling)
 X_new_scaled = scaler.transform(X_new)
@@ -60,9 +61,10 @@ print(y_pred.shape)
 
 # print(y_pred)
 y_pred_df = pd.DataFrame(y_pred, columns=['Predicted'])
-# Save to CSV
-y_pred_df.to_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/testing/predicted_class_of_patch_5.csv', header=False, index=False)
 
+# Save to CSV
+# y_pred_df.to_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/testing/predicted_class_of_patch_5.csv', header=False, index=False)
+y_pred_df.to_csv('/home/zhiyundeng/aeroplan/experiment/20240605_EER_64_training/testing/predicted_class_of_patch.csv', header=False, index=False)
 
 ## Assign cost 
 class_to_number = {
@@ -71,13 +73,22 @@ class_to_number = {
     # 'shrubbery': 3,
     # 'smooth_concrete': 0,
     # 'tree': 2
-    'smooth_trail': 0,
-    'dirt': 10,
+    # 'smooth_trail': 0,
+    # 'dirt': 10,
+    # 'grass': 80,
+    # 'canopy': 160,
+    # 'building': 254
+    'smooth_concrete': 0,
+    'rocky_concrete': 10,
     'grass': 80,
-    'canopy': 160,
-    'building': 254
+    'gravel': 100,
+    'tree': 160,
+    'shrubbery': 120
 }
 
 y_pred_cost = [class_to_number[label] for label in y_pred]
 y_pred_cost_df = pd.DataFrame(y_pred_cost, columns=['Cost'])
-y_pred_cost_df.to_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/testing/predicted_cost_of_patch_5.csv', header=False, index=False)
+# y_pred_cost_df.to_csv('/home/zhiyundeng/aeroplan/experiment/20240402_lejeune_emount_global_cost_map_batch/testing/predicted_cost_of_patch_5.csv', header=False, index=False)
+y_pred_cost_df.to_csv('/home/zhiyundeng/aeroplan/experiment/20240605_EER_64_training/testing/predicted_cost_of_patch.csv', header=False, index=False)
+
+
